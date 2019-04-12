@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*_files*
+notes/data
+notes/*png
+index.html
+*clean*
+data/*gz
