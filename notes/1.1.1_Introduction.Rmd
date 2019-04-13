@@ -27,6 +27,12 @@ knitr::opts_chunk$set(echo = TRUE, include = TRUE,
     + Should have two streams: Beginner & Intermediate
 - Organised along with BIG-SA
 
+## Tutors
+
+- Dan Kortschak, Jimmy Breen, Nathan Watson-Haigh
+- Cuong To, Rick Tearle, Lloyd Low, Terry Bertozzi
+- Ning Liu, Quanhui Wan, Melanie Smith, Sabrina Ng
+
 ## Who Am I? 
 
 **Steve Pederson**
@@ -147,6 +153,8 @@ By the end of the day, we'll be able to
 1. `File` > `New Project` > `New Directory` > `New Project`
     + Enter `R_Training` as the project name (check capitals & underscores)
     + `Create Project`
+2. `New Folder` then name it `data`
+
 
 ## R Projects
 
