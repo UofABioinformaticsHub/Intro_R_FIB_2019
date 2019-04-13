@@ -1,0 +1,204 @@
+---
+title: "2.2: Working With Text"
+subtitle: "Fall Into Bioinformatics, 2019"
+author: "Steve Pederson"
+date: "16 April 2019"
+output:
+  ioslides_presentation: 
+    css: ../custom.css
+    fig_caption: yes
+    logo: ../images/UoA_logo_col_vert.png
+    widescreen: yes
+---
+
+```{r, loadPackages, echo = FALSE, include = FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, include = TRUE, 
+               warning = FALSE, message = FALSE, 
+               out.width = 800, fig.align = "center",
+               results = 'hide')
+```
+
+
+# Text Manipulation
+
+## Text Manipulation
+
+- The package `stringr` contains functions for text manipulation 
+    + Another core package from `tidyverse`
+- Some basic knowledge of regular expressions is helpful
+- Functions `str_detect()`, `str_extract()`, `str_replace()`
+- Alternatives to `grepl()`, `grep()`, `gsub()` etc from `base`
+
+## `stringr::str_detect()`
+
+```{r}
+library(tidyverse)
+x <- c("Hi Mum", "Hi Mother")
+```
+
+- `str_detect()` returns a logical vector
+
+```{r}
+str_detect(string = x, pattern = "Mum")
+str_detect(string = x, pattern = "Hi")
+```
+
+## `stringr::str_detect()`
+
+We can use common `regex` syntax:
+
+- Alternatives are specified with `[]`
+
+```{r}
+str_detect(x, "h")
+str_detect(x, "[Hh]")
+```
+
+- Wild-cards are specified using `.`
+
+```{r}
+str_detect(x, "Mo")
+str_detect(x, "M.")
+```
+
+## `stringr::str_extract()`
+
+We can use `str_extract()` to extract patterns
+
+```{r}
+str_extract(string = x, pattern = "Hi M.")
+```
+
+This can be helpful if no matches are found
+
+```{r}
+str_extract(x, "Mum")
+```
+
+
+## `stringr::str_replace()`
+
+Common syntax for extracting/modifying text strings
+
+```{r}
+str_replace(x, pattern = "Mum", replacement = "Dad")
+```
+
+1. Searching the `string` "Hi Mum" for the `pattern` "Mum", and
+2. Replacing the first instance of "Mum" with "Dad"
+
+## `stringr::str_replace()`
+
+We can specify wild-cards as `.`
+
+```{r}
+str_replace(x, "M.", "Da")
+```
+
+We can also match any number of wild-cards by using `+`
+
+```{r}
+str_replace(x, "M.+", "Dad")
+```
+
+## `stringr::str_replace()`
+
+We can also capture words/phrases/patterns using `(pattern)`
+
+```{r}
+str_replace(x, "(Hi) (M.+)", "\\2! \\1!")
+```
+
+Patterns are numbered in the order they are "captured"
+
+## `stringr::str_replace()`
+
+We can also specify alternatives instead of wild-cards (`[]`)
+
+```{r}
+str_replace(x, "[Mm]", "b")
+```
+
+- `str_replace()` only replaces the first match in a string
+- `str_replace_all()` replaces **all** matches
+
+```{r}
+str_replace_all(x, "[Mm]", "b")
+```
+
+## `stringr::str_replace()`
+
+Alternative patterns can be specified using the conventional `OR` symbol `|`
+
+```{r}
+str_replace(x, "(Mum|Mother)", "Maternal Parent")
+```
+
+## More Helpful Functions
+
+```{r}
+str_count(x, "[Mm]")
+str_length(x)
+str_split_fixed(x, pattern = " ", n = 2)
+str_to_lower(x)
+str_to_title("a bad example")
+str_pad(c("1", "10", "100"), width = 3, pad = "0")
+```
+
+# Factors
+
+## Factors
+
+A common data type in statistics is a *categorical variable* (i.e. a `factor`)
+
+- Data will be a set of common groups
+
+```{r}
+pet_vec <- c("Dog", "Dog", "Cat", "Dog", "Cat")
+```
+
+- This is a `character` vector
+
+## Factors
+
+- We can simply coerce this to a vector of factors
+- Categories will automatically be assigned alphabetically
+
+```{r}
+pet_factors <- as.factor(pet_vec)
+pet_factors
+```
+
+We can manually set these categories as `levels`
+
+```{r}
+pet_factors <- factor(pet_vec, levels = c("Dog", "Cat"))
+```
+
+## Factors
+
+- These are actually stored as integers
+- Each integer corresponds to a `level`
+
+```{r, results='hide'}
+str(pet_factors)
+as.integer(pet_factors)
+as.character(pet_factors)
+```
+
+## Factors
+
+**What would happen if we think a `factor` is a `character`, and we use it to select values from a `vector`/`matrix`/`data.frame`?**
+
+## Factors
+
+**What would happen if we think a `factor` is a `character`, and we use it to select values from a `vector`/`matrix`/`data.frame`?**
+
+```{r}
+names(pet_vec) <- pet_vec
+pet_vec
+pet_vec[pet_factors]
+```
+
+*This is why I'm very cautious about `read.csv()` and the standard `data.frame` etc*
