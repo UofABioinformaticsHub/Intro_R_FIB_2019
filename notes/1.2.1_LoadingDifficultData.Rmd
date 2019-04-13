@@ -1,0 +1,248 @@
+---
+title: "1.2 Loading Difficult Data"
+subtitle: "Fall Into Bioinformatics, 2019"
+author: "Steve Pederson"
+date: "15 April 2019"
+output:
+  ioslides_presentation: 
+    css: ../custom.css
+    fig_caption: yes
+    logo: ../images/UoA_logo_col_vert.png
+    widescreen: yes
+---
+
+```{r, loadPackages, echo = FALSE, include = FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, include = TRUE, 
+               warning = FALSE, message = FALSE, 
+               out.width = 800, fig.align = "center")
+```
+
+# Loading Difficult Data
+
+## Setup
+
+If you've started a new session since last time:
+
+```{r}
+library(tidyverse)
+```
+
+
+## What if the data we have isn't nice?
+
+- Missing values might be given a value (e.g. 9999, "NA")
+- Column names might be missing
+- File may have comments
+- Irrelevant columns
+- May be structural issues in the file (Different column numbers)
+- White-space in cells
+
+## What if the data we have isn't nice?
+
+- Make sure the file `transport.csv` is in your `data` folder
+- Navigate to the file in your `Files` pane
+- Click on the file and choose `View File`
+
+**What problems do we face here?**
+
+```{r, echo=FALSE}
+opts_chunk$set(eval = FALSE)
+```
+
+## What if the data we have isn't nice? 
+
+**What problems do we face here?**
+
+1. A comment in the first line
+2. No column names
+3. Missing data encoded as "-" in the 4^th^ line
+4. A redundant column
+
+## What if the data we have isn't nice? 
+
+Let's try writing code for this instead of using the GUI
+
+**This will fail**
+
+```{r}
+transport <- read_csv("data/transport.csv")
+```
+
+- `R` uses the first row to guess how many columns there are
+    - The comment is indicating 1 column
+    
+## Removing Comments
+
+- We can tell `R` to ignore any lines beginning with `#`
+- Set the comment argument using `comment = "#"`
+
+```{r}
+transport <- read_csv("data/transport.csv", comment = "#")
+transport
+```
+
+ Now `R` is guessing the correct number of columns $\implies$ the file will load
+
+**What does all that red (or blue) stuff mean?**
+
+## Data without column names
+
+- `R` has assumed the first row contains column names
+- We can tell `R` to ignore these using: `col_names = FALSE`
+
+```{r}
+transport <- read_csv("data/transport.csv", 
+                      comment = "#", 
+                      col_names = FALSE)
+transport
+```
+
+**What has `R` used for column names?** 
+
+## Missing Data
+
+**What impact has the missing data in `X5` had?**
+
+- We can correctly assign missing data as `NA` (`na = "-"`)
+
+```{r}
+transport <- read_csv("data/transport.csv", 
+                      comment = "#", 
+                      col_names = FALSE, 
+                      na = "-")
+transport
+```
+
+## Ignoring Columns
+
+```{r, echo=FALSE}
+opts_chunk$set(eval = TRUE)
+```
+
+- We can also use the code `-` to skip a column
+- We can leave `R` to guess any remaining columns using `?`
+- Use the `col_types` argument: `col_types = "-?????"`
+
+```{r, results='hide'}
+transport <- read_csv("data/transport.csv",
+                      comment = "#", 
+                      col_names = FALSE, 
+                      na = "-", 
+                      col_types = "-?????")
+transport
+```
+
+## Specifying Columns
+
+- Or we can specify the exact type of data in each column
+- Numeric columns can be specified as `n`
+- Text or `character` columns can be specified as `c`
+
+```{r}
+transport <- read_csv("data/transport.csv", 
+                      comment = "#", 
+                      col_names = FALSE, 
+                      na = "-", 
+                      col_types = "-ccnnc")
+transport
+```
+
+## Specifying Columns
+
+- Let's accidentally **get the final column wrong** (use `n` instead of `c`)
+
+```{r,eval=FALSE}
+transport <- read_csv("data/transport.csv",
+                      comment = "#", 
+                      col_names = FALSE, 
+                      na = "-",
+                      col_types = "-ccnnn")
+transport
+```
+
+**NB: No warning will be given if a numeric column contains non-numeric characters**
+
+
+## Specifying Columns
+
+Let's change that back to the correct code:
+
+```{r}
+transport <- read_csv("data/transport.csv", 
+                      comment = "#", 
+                      col_names = FALSE, 
+                      na = "-", 
+                      col_types = "-ccnnc")
+transport
+```
+
+## Setting Column Names
+
+- My fix is to supply a `vector` of names
+
+```{r}
+myNames <- c("X1", "gender", "name", "weight", "height", "method")
+transport <- read_csv("data/transport.csv", 
+                      comment = "#", 
+                      col_names = myNames, 
+                      na = "-", 
+                      col_types = "-ccnnc")
+transport
+```
+
+
+## The `c()` function
+
+The most common function in `R` is `c()`
+
+- This stands for `combine`
+- Combines all values into a single `R` object, or `vector`
+- If left empty, it is equivalent to `NULL`
+
+```{r, results='markup'}
+c()
+```
+
+## The `c()` function
+
+- I have used this to create a vector of column names 
+- Used the assignment operator `<-` to assign this vector
+
+**What would happen if I gave too many or too few names?**
+
+- We need to be careful here...
+
+## Exporting Data
+
+After we've edited a file, we might also wish to export it
+
+```{r, eval=FALSE}
+?write_csv
+```
+
+- This is a wrapper for `write_delim()`
+- Can export `.csv`, `.txt`, `.tsv` etc.
+- Individual `R` objects can be exported using `write_rds()`
+
+## Exporting Data
+
+The best way to export this is:
+
+```{r}
+write_csv(transport, "data/transport_clean.csv")
+```
+
+## Bonus Challenge
+
+Download the file `geneCounts.out` (output from featureCounts)
+
+1. Try to import this using the GUI
+2. Try to import by using `read_delim()`
+    + Set this to skip the `Chr`, `Start`, `End` and `Strand` Columns
+    + Try to modify the column names using the function `basename()`
+    + Remove `_Fem_hisat2_sorted.bam` from the end of the column names
+
+<div class="footer" style="text-align:center;width:25%">
+[Home](http://uofabioinformaticshub.github.io/Intro_R_FIB_2019)
+</div>
