@@ -44,14 +44,15 @@ Password for `UofA-Guest`: `belltape`
 | ------- |:----- |:------ |:--------- |:---- |
 | 1       | 1. Introduction To RStudio | [Slides](notes/1.1.1_Introduction) | [Source](notes/1.1.1_Introduction.Rmd) | |
 |         | 2. Loading Data Into R | [Slides](notes/1.1.2_DataImport) | [Source](notes/1.1.2_DataImport.Rmd) | [toothData.csv](data/toothData.csv) <br> [RealTimeData.xlsx](data/RealTimeData.xlsx) |
+|         | 3. Loading Difficult Data | [Slides](notes/1.2.1_LoadingDifficultData) | [Source](notes/1.2.1_LoadingDifficultData.Rmd) | [transport.csv](data/transport.csv) <br> [geneCounts.out](data/geneCounts.out) |
 |         | | *Morning Tea* | | |
-| 2       | 1. Loading Difficult Data | [Slides](notes/1.2.1_LoadingDifficultData) | [Source](notes/1.2.1_LoadingDifficultData.Rmd) | [transport.csv](data/transport.csv) <br> [geneCounts.out](data/geneCounts.out) |
-|         | | *Lunch*       | | |
-| 3       | 1. Tidying Data | [Slides](notes/1.2.2_TidyingData) | [Source](notes/1.2.2_TidyingData.Rmd) | [contacts.csv](data/contacts.csv) <br> [wide.csv](data/wide.csv) <br> [PCR.csv](data/PCR.csv) |
+| 2       | 1. Tidying Data | [Slides](notes/1.2.2_TidyingData) | [Source](notes/1.2.2_TidyingData.Rmd) | [contacts.csv](data/contacts.csv) <br> [wide.csv](data/wide.csv) <br> [PCR.csv](data/PCR.csv) |
 |         | 2. Working with Text | [Slides](notes/1.2.3_TextManipulation) | [Source](notes/1.2.3_TextManipulation.Rmd) | |
-|         | | *Afternoon Tea* | | |
-| 4       | 1. Data Visualisation | [Slides](notes/1.3.1_DataVisualisation) | [Source](notes/1.3.1_DataVisualisation.Rmd) | |
+|         | | *Lunch*       | | |
+| 3       | 1. Data Visualisation | [Slides](notes/1.3.1_DataVisualisation) | [Source](notes/1.3.1_DataVisualisation.Rmd) | |
 |         | 2. Making Professional Plots | [Slides](notes/1.3.2_ProfessionalPlotting) | [Source](notes/1.3.2_ProfessionalPlotting.Rmd) | |
+|         | | *Afternoon Tea* | | |
+| 4       | 1. Using R Markdown | [Slides](notes/1.4_RMarkdown) | [Source](notes/1.4_RMarkdown.Rmd) | |
 
 
 [Back To Top](#introduction_to_r)
