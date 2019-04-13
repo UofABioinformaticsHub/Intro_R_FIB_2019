@@ -1,0 +1,267 @@
+---
+title: "1.3 Plots For Publication"
+subtitle: "Fall Into Bioinformatics, 2019"
+author: "Steve Pederson"
+date: "15 April 2019"
+output:
+  ioslides_presentation: 
+    css: ../custom.css
+    fig_caption: yes
+    logo: ../images/UoA_logo_col_vert.png
+    widescreen: yes
+---
+
+```{r, loadPackages, echo = FALSE, include = FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(echo = TRUE, include = TRUE, 
+               warning = FALSE, message = FALSE, fig.align = "center",
+               results = 'hide', fig.show = 'hide')
+transport <- read_csv("../data/transport_clean.csv") %>%
+  filter(!is.na(height))
+```
+
+# Making Professional Plots
+
+## Making Professional Plots
+
+Two main points:
+
+1. Tweaking the look of the previous plots
+2. Plot Resolution and Font Sizes
+
+## The package `ggplot2` | themes
+
+`ggplot2` uses themes to control the overall appearance
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw()
+```
+
+My default is `theme_bw()`
+
+- Removes the background grey, prints labels in black etc.
+
+## The package `ggplot2` | themes
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_classic()
+```
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_void()
+```
+
+## Setting a default theme
+
+You can set a default theme for a workspace or session
+
+```{r}
+theme_set(theme_bw())
+```
+
+Now all plots in the workspace will use `theme_bw()`
+
+## The package `ggplot2` | themes
+
+The `theme()` function is also where you set:
+
+- `axis.text`, `legend` attributes etc.
+- Often uses _elements_ to set an attribute
+
+```{r}
+?theme
+```
+
+## The package `ggplot2` | themes
+
+Changing text within themes uses `element_text()`
+
+```{r}
+?element_text
+```
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(axis.text.x = element_text(
+      angle = 90, hjust = 1, vjust = 0.5
+  ))
+```
+
+## The package `ggplot2` | themes
+
+Changing backgrounds and outlines uses `element_rect()`
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(legend.background = element_rect(
+      fill = "yellow", colour = "black"
+  ))
+```
+
+## The package `ggplot2` | themes
+
+To remove all attributes use `element_blank()` in place of `element_rect()`, `element_text()` or `element_line()`
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+```
+
+## Legends
+
+We can move the legend to multiple places:
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+## Legends
+
+Or we can use co-ordinates to place it inside the plotting region
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(legend.position = c(0.85, 0.15))
+```
+
+The plotting region is assumed to have width and height of 1
+
+## Other plot attributes | Axes
+
+We can also edit axes, fills, outlines etc. using `scale_...()` layers
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_y_log10(limits = c(100, 200), 
+                breaks = c(100, 125, 150, 175)) 
+```
+
+## Other plot attributes | Axes
+
+We can turn off or modify plot expansion
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_y_continuous(expand = c(0, 0)) 
+```
+
+- The first `a = 0` multiplies the scale by `1 + a`
+- The second `b = 0` adds $\pm$`b` to the axis extrema
+
+## Other plot attributes | Fill and Outline Colours
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_fill_manual(values = c("green", "blue"))
+```
+
+Colours can also be specified using hexadecimal codes
+
+```{r, include=TRUE,results='asis'}
+rgb(1, 0, 0)
+```
+
+# Saving Images
+
+## Exporting Figures | Using `ggsave()`
+
+The main image formats are `jpeg`, `png` and `tiff`
+
+- `R` can also export `svg` and `pdf`
+- `ggplot2` has the function `ggsave()`
+
+```{r}
+?ggsave
+```
+
+The `Plots` Tab is the default graphics device
+
+## Exporting Figures | Using `ggsave()`
+
+```{r}
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_fill_manual(values = c("green", "blue"))
+ggsave("HeightByGender.png")
+```
+
+- `ggsave` defaults to 300dpi 
+- Defaults to the size of the `Plots` Tab
+
+## Exporting Figures| Using `ggsave()`
+
+- Change the size manually by setting the `width` and `height` attributes
+
+```{r}
+ggsave("HeightByGender.png", width = 18, height = 18,
+       units = "cm")
+```
+
+- Getting the font size right can take ages
+- Need to set correctly when we make the plot
+
+## Exporting Figures | Writing Directly
+
+- We initiate another graphics device using `png()`, `jpeg()`, `pdf()` etc.
+- Turn the device off after creating the image using `dev.off()`
+- Nothing will appear in the `Plots` tab
+
+## Exporting Figures | Writing Directly
+
+```{r}
+png("HeightByGender.png", width = 18, height = 18, 
+    units = "cm", res = 300)
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(text = element_text(size = 16)) +
+  scale_fill_manual(values = c("green", "blue"))
+dev.off()
+```
+
+## Exporting Figures | Writing Directly
+
+Try to decide how big the plot will be in your final document
+
+- Export using that size
+- `pdf` and `svg` output are *vector*-based not *pixel*-based
+- Scale very well with size
+
+# Exercises
+
+## Exercises
+
+- Try loading and exploring the additional files:
+- `toothData`, `PCR` and `RealTimeData`
+
+
+---
+
+<div class="footer" style="text-align:center;width:25%">
+[Home](http://uofabioinformaticshub.github.io/Intro_R_FIB_2019/)
+</div>
