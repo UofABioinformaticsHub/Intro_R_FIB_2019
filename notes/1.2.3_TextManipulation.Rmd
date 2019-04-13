@@ -1,5 +1,5 @@
 ---
-title: "2.2: Working With Text"
+title: "1.2.3: Working With Text"
 subtitle: "Fall Into Bioinformatics, 2019"
 author: "Steve Pederson"
 date: "16 April 2019"
