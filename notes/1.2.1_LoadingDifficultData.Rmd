@@ -182,7 +182,7 @@ transport
 - My fix is to supply a `vector` of names
 
 ```{r}
-myNames <- c("X1", "gender", "name", "weight", "height", "method")
+myNames <- c("gender", "name", "weight", "height", "method")
 transport <- read_csv("data/transport.csv", 
                       comment = "#", 
                       col_names = myNames, 

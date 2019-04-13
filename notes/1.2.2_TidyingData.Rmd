@@ -1,0 +1,666 @@
+---
+title: "1.2 Tidying Data"
+subtitle: "Fall Into Bioinformatics, 2019"
+author: "Steve Pederson"
+date: "15 April 2019"
+output:
+  ioslides_presentation: 
+    css: ../custom.css
+    fig_caption: yes
+    logo: ../images/UoA_logo_col_vert.png
+    widescreen: yes
+---
+
+```{r, loadPackages, echo = FALSE, include = FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, include = TRUE, 
+               warning = FALSE, message = FALSE, 
+               out.width = 800, fig.align = "center",
+               results = 'hide')
+```
+
+# Data Manipulation
+
+## Data Manipulation
+
+Also known as _data munging_
+
+We'll cover:
+
+- `SQL-` and `Excel-`like functions in `dplyr`
+- Changing from wide to long form using `tidyr`
+- Editing text using `stringr`
+
+## Data Manipulation | Loading The Packages
+
+```{r}
+library(tidyverse)
+```
+
+- The package `dplyr` works specifically with `data.frame` objects
+- Works optimally with `tibble` objects
+- `library(tidyverse)` loads `dplyr`, `stringr` and `tidyr` (+ others)
+
+## But First | Logical Tests 
+
+- Is Equal To: `==`
+- Not equal: `!=`
+- Or: `|`
+- Less than: `<`
+- Less than or equal: `<=`
+
+## Logical Tests
+
+```{r, results='hide'}
+x <- c(1:5, NA)
+x == 5
+x != 5
+x > 3
+x > 3 | x == 2
+is.na(x)
+```
+
+- `R` also recognises the symbol `&` for `AND`
+- Not highly relevant for `dplyr`
+
+# The package `dplyr`
+
+## Starting with `dplyr`
+
+Data for this session:
+
+```{r, echo=FALSE}
+transport <- read_csv("../data/transport_clean.csv")
+```
+
+```{r, eval = FALSE, results='hide'}
+transport <- read_csv("data/transport_clean.csv")
+transport
+```
+
+So we have a `r nrow(transport)` x `r ncol(transport)` `data frame`
+
+```{r, results='hide'}
+dim(transport)
+nrow(transport)
+ncol(transport)
+```
+
+## Starting with `dplyr::select()` 
+
+- `dplyr` is part of the core `tidyverse`
+- The function `select()` allows you to select columns by name
+- The `data_frame` must be given as the first argument
+
+```{r}
+select(transport, gender, weight, height, method)
+```
+
+Or by position
+
+```{r}
+select(transport, 1:3)
+```
+
+## Starting with `dplyr::select()` 
+
+- We can also remove columns using the minus (`-`) sign
+
+```{r}
+select(transport, -2)
+select(transport, -name)
+```
+
+__Discuss: Would removing by name or position by the best?__
+
+## Starting with `dplyr::select()` 
+
+The `select()` function has a few helper functions
+
+- `starts_with()`, `ends_with()`, `contains()`, `one_of()` and `everything()`
+
+```{r}
+select(transport, ends_with("ght"))
+select(transport, contains("t"))
+```
+
+## Starting with `dplyr::select()` 
+
+__So far, we haven't changed the original object__
+
+We can overwrite this anytime (sometimes we will by accident)
+
+```{r, eval=FALSE}
+transport <- select(transport, -name)
+transport
+```
+
+Now we have removed the `name` column in our oject `transport`
+
+## Starting with `dplyr::select()` 
+
+- To get the column back, we need to reload the `.csv` file
+
+```{r, eval=FALSE}
+transport <- read_csv("data/transport_clean.csv")
+```
+
+(Ah, the joys of using code...)
+
+## Using `dplyr::filter()` 
+
+- We can use our logical tests to filter the data
+- Again we need to specify the `data_frame` as the first argument
+
+```{r}
+filter(transport, method == "car")
+filter(transport, method == "car", gender == "female")
+```
+
+## Using `dplyr::arrange()` 
+
+We can sort on one or more columns
+
+```{r}
+arrange(transport, weight)
+arrange(transport, method, height)
+```
+
+We can change to descending order using `desc()`
+
+```{r}
+arrange(transport, desc(weight))
+```
+
+# Combining Functions
+
+## Combining Functions
+
+- This is where `dplyr` steps up a gear
+- We can chain functions together using `%>%`
+- This behaves like a `|` in the bash shell (Covered tomorrow)
+- From the package `magrittr`
+- Is always imported by `dplyr`
+
+Places the **output of the first function** as the **first argument** of the next function!
+
+-----
+
+```{r, echo=FALSE, include=TRUE, results='asis'}
+include_graphics("../images/MagrittePipe.jpg")
+```
+
+## Combining Functions
+
+```{r}
+filter(transport, method == "bike")
+```
+
+Is identical to 
+
+```{r}
+transport %>% filter(method == "bike")
+```
+
+## Combining Functions
+
+But now we can chain together multiple operations!
+
+```{r}
+transport %>% filter(method == "bike") %>% arrange(weight)
+```
+
+There is __no limit__ to the number of functions you can connect together
+
+## For the technically minded
+
+1. Each function in `dplyr` takes a `data.frame` as the first argument
+2. Each function returns a `data.frame`
+
+```{r}
+transport %>% filter(method == "bike") %>% arrange(weight)
+```
+
+
+1. The `magrittr` placed `transport` into the first argument of `filter()`
+2. The output of `filter()` was a `data.frame` $\implies$ this was placed as the first argument to `arrange()`
+
+
+## Using `dplyr::mutate()`
+
+We can add extra columns using `mutate()`
+
+```{r}
+transport %>% mutate(height_m = height/100)
+```
+
+Once we've added a column, we can refer to it by name
+
+```{r}
+transport %>% 
+  mutate(height_m = height/100, 
+         BMI = weight / height_m^2)
+```
+
+## Using `dplyr::mutate()`
+
+We can also overwrite existing columns
+
+```{r}
+transport %>% mutate(height = height/100)
+```
+
+__Have we changed the original__ `data_frame` yet?
+
+## Using `dplyr::rename()`
+
+Can use the function `rename()`
+
+```{r}
+transport %>% rename(height_cm = height)
+```
+
+Now we can get crazy
+
+```{r}
+transport %>%
+  rename(height_cm = height) %>%
+  mutate(height_m = height_cm/100,
+         BMI = weight / height_m^2) %>%
+  filter(BMI > 25)
+```
+
+## Getting Summaries
+
+We can get summaries for entire columns
+
+```{r}
+transport %>% 
+  summarise(mean(weight), mean(height))
+```
+
+## Getting Summaries
+
+Let's deal with that missing value:
+
+```{r}
+transport %>%
+  summarise(
+      mn_wt = mean(weight, na.rm = TRUE), 
+      mn_ht = mean(height, na.rm = TRUE)
+  )
+```
+
+## Getting Summaries
+
+We can group categorical variables by their levels
+
+```{r}
+transport %>%
+  group_by(gender) %>%
+  summarise(
+      mn_wt = mean(weight, na.rm = TRUE), 
+      mn_ht = mean(height, na.rm = TRUE)
+  )
+```
+
+
+## Getting Group Summaries
+
+Or combinations of levels
+
+```{r}
+transport %>%
+  group_by(gender, method) %>%
+  summarise(
+      mn_wt = mean(weight, na.rm = TRUE), 
+      mn_ht = mean(height, na.rm = TRUE)
+  )
+```
+
+We can use any function that spits out a single value
+
+- `sd()`, `min()`, `median()`
+
+## Getting Group Summaries
+
+We could assign our own names to the columns
+
+```{r}
+transport %>%
+  group_by(gender, method) %>%
+  summarise(
+      mn_wt = mean(weight, na.rm = TRUE), 
+      mn_ht = mean(height, na.rm = TRUE)
+  )
+```
+
+## Getting Group Summaries
+
+And we can count how many entries we have using `n()`
+
+```{r}
+transport %>%
+  group_by(gender, method) %>%
+  summarise(
+      mn_wt = mean(weight, na.rm = TRUE), 
+      mn_ht = mean(height, na.rm = TRUE),
+      n = n())
+```
+
+# Applying Multiple Functions 
+
+## Applying Multiple Functions 
+
+- Use the function `summarise_at()`
+- Can apply `starts_with()`, `ends_with()`, `contains()` syntax to specify variables/columns
+    - Must be wrapped in `vars()`
+- Can apply multiple functions
+    - Must be given as a `list` using `list(~function)`
+    
+## Applying Multiple Functions 
+
+```{r}
+transport %>%
+  group_by(gender, method) %>%
+  summarise_at(
+      vars(ends_with("ght")), 
+      list(~mean, ~sd), 
+      na.rm = TRUE)
+```
+
+## Applying Multiple Functions
+
+We could reorder the results using `select()`
+
+```{r}
+transport %>%
+  group_by(gender, method) %>%
+  summarise_at(
+      vars(ends_with("ght")), 
+      list(~mean, ~sd), 
+      na.rm = TRUE) %>%
+  select(gender, method, 
+         starts_with("weight"), 
+         starts_with("height"))
+```
+
+## Using `dplyr::case_when()`
+
+Kalen just had her height measured and she is 158.1cm. That missing value can be fixed!!!
+
+```{r}
+transport %>%
+  mutate(height = case_when(
+    name == "Kalen" ~ 158.1,
+    name != "Kalen" ~ height
+  ))
+```
+
+`case_when()` is like `if_else()` but allows for multiple options
+
+
+## Using `dplyr::case_when()`
+
+Let's overwrite that initial object
+
+```{r}
+transport <- transport %>%
+  mutate(height = case_when(
+    name == "Kalen" ~ 158.1,
+    name != "Kalen" ~ height
+  ))
+```
+
+**What would happen if we accidentally ran this again?**
+
+# Combining Data Frames
+
+## Combining Data Frames
+
+`dplyr` has some very useful functions for combining `data.frame` objects: `bind_rows()`, `left_join()`, `right_join()` and `full_join()`
+
+Unbelievably, we've just had even more data.
+
+`Tony` is a 83kg car-driver, who is 177.3cm tall!
+
+We can manually create a `tibble` for him
+
+## Combining Data Frames
+
+```{r}
+tony <- tibble(
+    gender = "male",
+    name = "Tony",
+    weight = 83,
+    height = 177.3,
+    method = "car"
+)
+```
+
+We can add his data using `bind_rows()`
+
+```{r}
+bind_rows(tony, transport)
+```
+
+
+## Combining Data Frames
+
+1. Download the object `contacts.csv` to your data folder
+2. Load the contact numbers in the file `contacts.csv`
+
+```{r, echo=FALSE}
+contacts <- read_csv("../data/contacts.csv")
+```
+
+
+```{r, eval=FALSE}
+contacts <- read_csv("data/contacts.csv")
+dim(contacts)
+dim(transport)
+```
+
+
+## Combining Data Frames {.build}
+
+**Do these objects look compatible?**
+
+- Some may be missing in one of the objects
+- The values in the `name` column look similar
+- In a different order
+
+**How do we combine these?**    
+
+## Combining Data Frames | `left_join()`
+
+We can use the first `data_frame` as the template
+
+```{r}
+left_join(transport, contacts, by = "name")
+```
+
+- Any `name` entries missing from the second object (`contacts`) will become a missing value in the column `contact`
+- Any `name` entries in the first which have multiple matches in the second will be expanded
+
+## Combining Data Frames | `right_join()`
+
+We can use the second object as the template
+
+```{r}
+right_join(transport, contacts, by = "name")
+```
+Any missing from the first object (`data`) will become a row of missing values where missing
+
+## Combining Data Frames | `full_join()`
+
+Or we can combine everything
+
+```{r}
+full_join(transport, contacts, by = "name")
+```
+
+Will be missing values in both directions
+
+
+# Reshaping your data
+
+## Reshaping your data
+
+- This dataset is in what we refer to as `wide` form
+- We have a row of measurements for each individual
+- The information is _structured around the individual_
+
+In `long` form, the information is _structured around the measurement_
+
+## Reshaping your data | From Wide to Long
+
+```{r, echo=FALSE}
+wideData <- read_csv("../data/wide.csv")
+```
+
+
+```{r, eval=FALSE}
+wideData <- read_csv("data/wide.csv")
+wideData
+```
+
+This is a time course:
+
+- Measuring log-change in GFP intensity
+- Two treatments (`Tx`) A & B 
+- Also have identifier columns
+
+
+## From Wide to Long
+
+The basic function is `gather()`
+
+- Part of the core tidyverse package `tidyr`
+- Key arguments are:
+    - `key`: what are the column names describing
+    - `value`: what is the value in these columns
+- Select columns to `gather` using `dplyr` helper functions
+    
+## From Wide to Long
+
+```{r}
+wideData %>%
+  gather(key = "Day",
+         value = "Change",
+         contains("day"))
+```
+
+Many functions require data to be in this format
+
+## From Wide to Long
+
+__How could we get means for each treatment/day from the original data?__
+
+## From Wide to Long
+
+__How could we get means for each treatment/day from the original data?__
+
+```{r}
+wideData %>%
+  gather(key = "Day",
+         value = "Change",
+         contains("day")) %>%
+  group_by(Tx, Day) %>%
+  summarise(mn_change = mean(Change))
+```
+
+Might be easier if needing more summaries (e.g. `sd()`)
+
+## Reshaping your data | From Long To Wide
+
+Let's save that last summary `data.frame`
+
+```{r}
+wideMeans <- wideData %>%
+  gather(key = "Day",
+         value = "Change",
+         contains("day")) %>%
+  group_by(Tx, Day) %>%
+  summarise(mn_change = mean(Change))
+```
+
+## From Long To Wide
+
+We can change from long to wide using the 'opposite' function `spread()`
+
+- Values in the `key =` column become the new column names
+- Values in the `value =` column remain the values
+
+```{r}
+wideMeans %>%
+  spread(key = Day,
+         value = mn_change)
+```
+
+
+## From Long To Wide
+
+```{r, echo=FALSE}
+pcr <- read_csv("../data/PCR.csv")
+```
+
+
+Would we ever use both `gather()` and `spread()`?
+
+```{r, eval=FALSE}
+pcr <- read_csv("data/PCR.csv")
+head(pcr)
+```
+
+Here we have 3 genes being measured in 2 cell types, across 3 time-points
+
+## From Long To Wide
+
+The first part is easy:
+
+```{r}
+pcr %>%
+  gather(key = CellType,
+         value = Ct,
+         ends_with("hr"))
+```
+
+If we want to now organise by treatment and timepoint:
+
+- Need to separate `CellType` into two columns
+
+
+## From Long To Wide
+
+We can use the function `separate()` 
+
+```{r}
+pcr %>%
+  gather(key = CellType,
+         value = Ct,
+         ends_with("hr")) %>%
+  separate(col = CellType, 
+           into = c("CellType", "TimePoint"))
+```
+
+## From Long To Wide
+
+Now we can form our final data structure
+
+```{r}
+pcr %>%
+  gather(key = CellType,
+         value = Ct,
+         ends_with("hr")) %>%
+  separate(col = CellType, 
+           into = c("CellType", "TimePoint")) %>%
+  spread(key = TimePoint,
+         value = Ct)
+```
+
+---
+
+<div class="footer" style="text-align:center;width:25%">
+[Home](http://uofabioinformaticshub.github.io/Intro_R_FIB_2019/)
+</div>
