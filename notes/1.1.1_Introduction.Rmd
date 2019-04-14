@@ -27,11 +27,22 @@ knitr::opts_chunk$set(echo = TRUE, include = TRUE,
     + Should have two streams: Beginner & Intermediate
 - Organised along with BIG-SA
 
-## Tutors
+## Course Outline
+
+- Day 1: R & RStudio
+    - Very interactive, statistics and results
+- Day 2: Bash & The Command Line
+    - Large file manipulation, HPC Interaction
+- Day 3: NGS Data
+    - Focussed on RNA Seq this time
+    - Use all skills from Days 1 & 2
+
+## Tutors & Contributors
 
 - Dan Kortschak, Jimmy Breen, Nathan Watson-Haigh
 - Cuong To, Rick Tearle, Lloyd Low, Terry Bertozzi
 - Ning Liu, Quanhui Wan, Melanie Smith, Sabrina Ng
+- Paul Wang, John Toubia
 
 ## Who Am I? 
 
@@ -87,7 +98,7 @@ knitr::opts_chunk$set(echo = TRUE, include = TRUE,
     - Packages are a collection of related functions
     - Not curated for statistical quality or documentation
 - Bioconductor is a secondary repository (https://www.bioconductor.org)
-    - Packages have a more biological/genomics focus
+    - Packages have a biological/genomics focus
     - Curated for consistency & documentation
    
 ## Where is R used?
@@ -142,13 +153,15 @@ By the end of the day, we'll be able to
 ## What is RStudio | Some very helpful features of `RStudio`
 
 - We can write scripts and **execute code** interactively
--  Auto-completion by hitting the `<tab>` key
+- Auto-completion by hitting the `<tab>` key
 - Use of `R Projects` to manage code/data for each project/analysis
 - We can see **everything** we need (directories, plots, code, history etc.)
 - Integration with markdown, $\LaTeX$, bash, python, C++, version control software etc.
 
 
 ## Before we start | Create an R Project
+
+(There is no need to save your R workspace if asked)
 
 1. `File` > `New Project` > `New Directory` > `New Project`
     + Enter `R_Training` as the project name (check capitals & underscores)
@@ -209,13 +222,13 @@ As well as performing simple calculations:
 - `R` has what we call an `Environment` (i.e. a Workspace)
 - We can define objects here, or import data
    - Like a workbook in Excel, but **much more** flexible & powerful
+   - Don't need all those empty rows & columns like Excel 
 - `R` performs calculations & runs processes on these objects
 
 ## The R Environment | Creating an `R` object
 
 - We need to give it a name, and some data
     - Like naming a spreadsheet in Excel (e.g. `Sheet1`)
-    - Doesn't need all those empty rows & columns like Excel 
 - The process looks like `nameOfObject <- data`
     - The `<-` symbol is like an arrow
     - Tells `R` to put the `data` **in the object**
@@ -302,6 +315,7 @@ log(x)
 
 - Instead of a single value, we can give an `R` object multiple values
 - Known as a **vector** $\implies$ like a column in Excel
+- `R` requires all elements of a vector to be *the same type*
 
 ```{r}
 x <- 1:5
@@ -360,7 +374,7 @@ x <- 5
 
 To send this to the Console:
 
-- Place the cursor on a line then `Ctrl+Enter` (`Cmd+Enter` on OSX), or
+- Place the cursor on a line then `Ctrl+Enter` (`Cmd+Enter` on MacOS), or
 - Select the lines using the mouse then `Ctrl+Enter` (or `Cmd+Enter`)
 - Or after selecting one or more lines you can click the `Run` button
     - Be careful to select all the correct text though...

@@ -137,12 +137,34 @@ slide:not(.current) .plotly.html-widget{
 <li>Organised along with BIG-SA</li>
 </ul>
 
-</article></slide><slide class=""><hgroup><h2>Tutors</h2></hgroup><article  id="tutors">
+</article></slide><slide class=""><hgroup><h2>Course Outline</h2></hgroup><article  id="course-outline">
+
+<ul>
+<li>Day 1: R &amp; RStudio
+
+<ul>
+<li>Very interactive, statistics and results</li>
+</ul></li>
+<li>Day 2: Bash &amp; The Command Line
+
+<ul>
+<li>Large file manipulation, HPC Interaction</li>
+</ul></li>
+<li>Day 3: NGS Data
+
+<ul>
+<li>Focussed on RNA Seq this time</li>
+<li>Use all skills from Days 1 &amp; 2</li>
+</ul></li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Tutors &amp; Contributors</h2></hgroup><article  id="tutors-contributors">
 
 <ul>
 <li>Dan Kortschak, Jimmy Breen, Nathan Watson-Haigh</li>
 <li>Cuong To, Rick Tearle, Lloyd Low, Terry Bertozzi</li>
 <li>Ning Liu, Quanhui Wan, Melanie Smith, Sabrina Ng</li>
+<li>Paul Wang, John Toubia</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Who Am I?</h2></hgroup><article  id="who-am-i">
@@ -229,7 +251,7 @@ slide:not(.current) .plotly.html-widget{
 <li>Bioconductor is a secondary repository (<a href='https://www.bioconductor.org' title=''>https://www.bioconductor.org</a>)
 
 <ul>
-<li>Packages have a more biological/genomics focus</li>
+<li>Packages have a biological/genomics focus</li>
 <li>Curated for consistency &amp; documentation</li>
 </ul></li>
 </ul>
@@ -310,6 +332,8 @@ slide:not(.current) .plotly.html-widget{
 
 </article></slide><slide class=""><hgroup><h2>Before we start </h2><h3> Create an R Project</h3></hgroup><article  id="before-we-start-create-an-r-project">
 
+<p>(There is no need to save your R workspace if asked)</p>
+
 <ol>
 <li><code>File</code> &gt; <code>New Project</code> &gt; <code>New Directory</code> &gt; <code>New Project</code>
 
@@ -384,6 +408,7 @@ slide:not(.current) .plotly.html-widget{
 <li><code>R</code> has what we call an <code>Environment</code> (i.e. a Workspace)</li>
 <li>We can define objects here, or import data</li>
 <li>Like a workbook in Excel, but <strong>much more</strong> flexible &amp; powerful</li>
+<li>Don&#39;t need all those empty rows &amp; columns like Excel</li>
 <li><code>R</code> performs calculations &amp; runs processes on these objects</li>
 </ul>
 
@@ -394,7 +419,6 @@ slide:not(.current) .plotly.html-widget{
 
 <ul>
 <li>Like naming a spreadsheet in Excel (e.g. <code>Sheet1</code>)</li>
-<li>Doesn&#39;t need all those empty rows &amp; columns like Excel</li>
 </ul></li>
 <li>The process looks like <code>nameOfObject &lt;- data</code>
 
@@ -501,6 +525,7 @@ print(x)</pre>
 <ul>
 <li>Instead of a single value, we can give an <code>R</code> object multiple values</li>
 <li>Known as a <strong>vector</strong> \(\implies\) like a column in Excel</li>
+<li><code>R</code> requires all elements of a vector to be <em>the same type</em></li>
 </ul>
 
 <pre class = 'prettyprint lang-r'>x &lt;- 1:5
@@ -566,7 +591,7 @@ x &lt;- 5</pre>
 <p>To send this to the Console:</p>
 
 <ul>
-<li>Place the cursor on a line then <code>Ctrl+Enter</code> (<code>Cmd+Enter</code> on OSX), or</li>
+<li>Place the cursor on a line then <code>Ctrl+Enter</code> (<code>Cmd+Enter</code> on MacOS), or</li>
 <li>Select the lines using the mouse then <code>Ctrl+Enter</code> (or <code>Cmd+Enter</code>)</li>
 <li>Or after selecting one or more lines you can click the <code>Run</code> button
 

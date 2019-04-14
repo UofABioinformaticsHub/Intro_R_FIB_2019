@@ -45,7 +45,11 @@ First let's get the data for this exercise.
 
 - Data for all three days is on your VM in the folder `/home/trainee/data`.
 - It's dynamically linked to the source, so please don't anything edit in this folder
-- Select everything in `~/data/intro_r` and `Copy To` `~/R_Training/data`
+
+```{r, eval=FALSE}
+f <- list.files("~/data/intro_r/", full.names = TRUE)
+file.copy(f, "~/R_Training/data/")
+```
 
 ## Importing Data
 
@@ -89,7 +93,7 @@ library(tidyverse)
 - A package contains a set of functions for related tasks
 - We've already seen `min()`, `max()` etc from `base`
 - This command loads a core set:
-    - `readr`, `dplyr`, `tibble`, `ggplot2`, `tidyr` and `purrr`
+    - `readr`, `dplyr`, `tibble`, `stringr`, `ggplot2`, `tidyr` and `purrr`
 
 # Import Using the GUI
 
@@ -245,7 +249,7 @@ toothData$len
 
 ```{r,eval=FALSE}
 toothData[1:3, ]
-tootehData[,"len"]
+toothData[,"len"]
 ```
 
 - All `data.frame`/`tibble` objects must have column names.
