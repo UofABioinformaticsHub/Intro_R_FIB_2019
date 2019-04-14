@@ -255,6 +255,20 @@ slide:not(.current) .plotly.html-widget{
 <li>The second <code>b = 0</code> adds \(\pm\)<code>b</code> to the axis extrema</li>
 </ul>
 
+</article></slide><slide class=""><hgroup><h2>Other plot attributes </h2><h3> Axes</h3></hgroup><article  id="other-plot-attributes-axes-2">
+
+<p>Alternatively, we can use <code>expand_scale()</code> to set expansion on either side.</p>
+
+<pre class = 'prettyprint lang-r'>ex &lt;- expand_scale(mult = c(0, 0.05), add = c(0, 0))
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_y_continuous(expand = ex) </pre>
+
+<ul>
+<li>The input to <code>expand_scale()</code> adjusts <code>bottom</code>/<code>top</code> or <code>left</code>/<code>right</code> depending on your axis.</li>
+</ul>
+
 </article></slide><slide class=""><hgroup><h2>Other plot attributes </h2><h3> Fill and Outline Colours</h3></hgroup><article  id="other-plot-attributes-fill-and-outline-colours">
 
 <pre class = 'prettyprint lang-r'>ggplot(transport, aes(x = gender, y = height, fill = gender)) +

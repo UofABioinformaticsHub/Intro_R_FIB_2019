@@ -170,6 +170,20 @@ ggplot(transport, aes(x = gender, y = height, fill = gender)) +
 - The first `a = 0` multiplies the scale by `1 + a`
 - The second `b = 0` adds $\pm$`b` to the axis extrema
 
+## Other plot attributes | Axes
+
+Alternatively, we can use `expand_scale()` to set expansion on either side.
+
+```{r}
+ex <- expand_scale(mult = c(0, 0.05), add = c(0, 0))
+ggplot(transport, aes(x = gender, y = height, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  scale_y_continuous(expand = ex) 
+```
+
+- The input to `expand_scale()` adjusts `bottom`/`top` or `left`/`right` depending on your axis.
+
 ## Other plot attributes | Fill and Outline Colours
 
 ```{r}
