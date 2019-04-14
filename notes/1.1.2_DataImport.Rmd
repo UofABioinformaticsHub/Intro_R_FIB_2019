@@ -44,7 +44,7 @@ opts_chunk$set(echo = TRUE, include = TRUE,
 First let's get the data for this exercise.
 
 - Data for all three days is on your VM in the folder `/home/trainee/data`.
-- It's dynamically linked to the source, so please don't anything edit in this folder
+- It's dynamically linked to the source, so please don't edit anything in this folder
 
 ```{r, eval=FALSE}
 f <- list.files("~/data/intro_r/", full.names = TRUE)
