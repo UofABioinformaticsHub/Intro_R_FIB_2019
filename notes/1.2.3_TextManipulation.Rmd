@@ -104,7 +104,7 @@ str_replace(x, "M.+", "Dad")
 
 ## `stringr::str_replace()`
 
-We can also capture words/phrases/patterns using `(pattern)`
+We can also **capture** words/phrases/patterns using `(pattern)`
 
 ```{r}
 str_replace(x, "(Hi) (M.+)", "\\2! \\1!")
@@ -199,6 +199,7 @@ as.character(pet_factors)
 names(pet_vec) <- pet_vec
 pet_vec
 pet_vec[pet_factors]
+pet_vec[as.character(pet_factors)]
 ```
 
 *This is why I'm very cautious about `read.csv()` and the standard `data.frame` etc*

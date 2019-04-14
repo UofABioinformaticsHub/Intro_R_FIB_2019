@@ -4,6 +4,8 @@
 For the entire Fall Into Bioinformatics Course we'll be connecting to a virtual machine with all of the required software already installed.
 This may be a bit difficult at the beginning, but I'm sure we'll have it sorted with the first hour or so.
 
+Please note, the VMs are only visible inside the UofA network. External connections will not be able to see them. If your connection appears to be timing out, please check your WiFi connection.
+
 ### Windows Only
 
 We'll assume you have `git bash` installed, so please open this to give yourself a terminal. 

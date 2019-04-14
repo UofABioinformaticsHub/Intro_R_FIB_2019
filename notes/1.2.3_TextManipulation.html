@@ -202,7 +202,7 @@ str_detect(x, &quot;M.&quot;)</pre>
 
 </article></slide><slide class=""><hgroup><h2><code>stringr::str_replace()</code></h2></hgroup><article  id="stringrstr_replace-2">
 
-<p>We can also capture words/phrases/patterns using <code>(pattern)</code></p>
+<p>We can also <strong>capture</strong> words/phrases/patterns using <code>(pattern)</code></p>
 
 <pre class = 'prettyprint lang-r'>str_replace(x, &quot;(Hi) (M.+)&quot;, &quot;\\2! \\1!&quot;)</pre>
 
@@ -287,7 +287,8 @@ as.character(pet_factors)</pre>
 
 <pre class = 'prettyprint lang-r'>names(pet_vec) &lt;- pet_vec
 pet_vec
-pet_vec[pet_factors]</pre>
+pet_vec[pet_factors]
+pet_vec[as.character(pet_factors)]</pre>
 
 <p><em>This is why I&#39;m very cautious about <code>read.csv()</code> and the standard <code>data.frame</code> etc</em></p></article></slide>
 
