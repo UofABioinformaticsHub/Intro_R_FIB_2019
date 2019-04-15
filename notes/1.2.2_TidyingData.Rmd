@@ -135,7 +135,7 @@ transport <- select(transport, -name)
 transport
 ```
 
-Now we have removed the `name` column in our oject `transport`
+Now we have removed the `name` column in our object `transport`
 
 ## Starting with `dplyr::select()` 
 
